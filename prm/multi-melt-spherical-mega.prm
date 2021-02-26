@@ -4,7 +4,7 @@ set End time                                   = 1.0e8
 set Use years in output instead of seconds     = true
 set CFL number                                 = 0.5
 set Nonlinear solver scheme                    = iterated Advection and Stokes
-set Max nonlinear iterations                   = 50
+set Max nonlinear iterations                   = 60
 set Nonlinear solver tolerance                 = 1e-7
 set Pressure normalization                     = surface
 set Surface pressure                           = 0
@@ -19,15 +19,14 @@ subsection Solver parameters
   end
   subsection Stokes solver parameters
     set Linear solver tolerance                = 1e-8
-    set Number of cheap Stokes solver steps    = 200
+    set Number of cheap Stokes solver steps    = 300
   end
 end
 
 set Use operator splitting = true
 
 subsection Boundary velocity model
-  set Tangential velocity boundary indicators = outer, left, right
-  set Zero velocity boundary indicators = inner
+  set Tangential velocity boundary indicators = inner, outer, left, right
 end
 
 
