@@ -7,3 +7,4 @@ This model runs on ASPECT - Advanced Solver for Problems in Earth's ConvecTion. 
   
 # Version-information
 OS: Ubuntu 20.04 LTS
+ASPECT: ASPECT 2.2.0
