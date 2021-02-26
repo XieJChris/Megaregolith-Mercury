@@ -52,118 +52,118 @@ namespace aspect
 		{
 		public:
 
-			/**
-			 * Return whether the model is compressible or not.
-			 */
-			bool is_compressible() const override;
+		  /**
+		   * Return whether the model is compressible or not.
+		   */
+		   bool is_compressible() const override;
 
-			/**
-			 * Return the reference viscosity.
-			 */
-			double reference_viscosity() const override;
+		  /**
+		   * Return the reference viscosity.
+		   */
+		   double reference_viscosity() const override;
 
-			double reference_darcy_coefficient() const override;
+		   double reference_darcy_coefficient() const override;
 
-			/**
-             * Compute the equilibrium melt fractions for the given input conditions.
-             * @p in and @p melt_fractions need to have the same size.
-             *
-             * @param in Object that contains the current conditions.
-             * @param melt_fractions Vector of doubles that is filled with the
-             * equilibrium melt fraction for each given input conditions.
-             */
-			void evaluate(const typename Interface<dim>::MaterialModelInputs &in, typename Interface<dim>::MaterialModelOutputs &out) const override;
+		  /**
+                   * Compute the equilibrium melt fractions for the given input conditions.
+                   * @p in and @p melt_fractions need to have the same size.
+                   *
+                   * @param in Object that contains the current conditions.
+                   * @param melt_fractions Vector of doubles that is filled with the
+                   * equilibrium melt fraction for each given input conditions.
+                   */
+		   void evaluate(const typename Interface<dim>::MaterialModelInputs &in, typename Interface<dim>::MaterialModelOutputs &out) const override;
 
-			void melt_fractions(const MaterialModel::MaterialModelInputs<dim> &in, std::vector<double> &melt_fractions) const override;
+		   void melt_fractions(const MaterialModel::MaterialModelInputs<dim> &in, std::vector<double> &melt_fractions) const override;
 
-			/**
-         	 * @name Functions used in dealing with run-time parameters
-         	 * @{
-             */
-            /**
-             * Declare the parameters this class takes through input files.
-             */
-			static void declare_parameters(ParameterHandler &prm);
+		  /**
+         	   * @name Functions used in dealing with run-time parameters
+         	   * @{
+                   */
+                 /**
+                  * Declare the parameters this class takes through input files.
+                  */
+	          static void declare_parameters(ParameterHandler &prm);
 
-			/**
-             * Read the parameters this class declares from the parameter file.
-             */
-			void parse_parameters(ParameterHandler &prm) override;
+		 /**
+                  * Read the parameters this class declares from the parameter file.
+                  */
+		  void parse_parameters(ParameterHandler &prm) override;
 
-			void create_additional_named_outputs(MaterialModel::MaterialModelOutputs<dim> &out) const override;
+		  void create_additional_named_outputs(MaterialModel::MaterialModelOutputs<dim> &out) const override;
 
 		private:
 
-			/**
-			 * List of thermal expansivities.
-			 */
-			std::vector<double> thermal_expansivities;
+		 /**
+		  * List of thermal expansivities.
+		  */
+		  std::vector<double> thermal_expansivities;
 
-			/**
-			 * List of reference specific heats.
-			 */
-        	std::vector<double> reference_specific_heats;
+		 /**
+	          * List of reference specific heats.
+		  */
+        	  std::vector<double> reference_specific_heats;
 
-        	/**
-        	 * List of thermal conductivities.
-        	 */
-        	std::vector<double> thermal_conductivities;
+        	 /**
+        	  * List of thermal conductivities.
+        	  */
+        	  std::vector<double> thermal_conductivities;
 
-        	/**
-        	 * List of reference viscosities.
-        	 */
-        	std::vector<double> eta_0;
+        	 /**
+        	  * List of reference viscosities.
+        	  */
+        	  std::vector<double> eta_0;
 
-        	/**
-        	 * List of reference densities.
-        	 */
-        	std::vector<double> reference_densities;
+        	 /**
+        	  * List of reference densities.
+        	  */
+        	  std::vector<double> reference_densities;
 
-        	double reference_rho_s;
+        	  double reference_rho_s;
 
-        	double reference_rho_f;
+        	  double reference_rho_f;
 
-        	double reference_T;
+        	  double reference_T;
 
-        	double xi_0;
+        	  double xi_0;
 
-        	double eta_f;
+        	  double eta_f;
 
-        	double thermal_viscosity_exponent;
+        	  double thermal_viscosity_exponent;
 
-        	double thermal_bulk_viscosity_exponent;
+        	  double thermal_bulk_viscosity_exponent;
 
-        	double reference_permeability;
+        	  double reference_permeability;
 
-        	double alpha_phi;
+        	  double alpha_phi;
 
-        	double depletion_density_change;
+        	  double depletion_density_change;
 
-        	double depletion_solidus_change;
+        	  double depletion_solidus_change;
 
-        	double pressure_solidus_change;
+        	  double pressure_solidus_change;
 
-        	double surface_solidus;
+        	  double surface_solidus;
 
-        	double compressibility;
+        	  double compressibility;
 
-        	double melt_compressibility;
+        	  double melt_compressibility;
 
-        	double melting_time_scale;
+        	  double melting_time_scale;
 
-        	double alpha_depletion;
+        	  double alpha_depletion;
 
-        	double delta_eta_depletion_max;
+        	  double delta_eta_depletion_max;
 
-        	double peridotite_melting_entropy_change;
+        	  double peridotite_melting_entropy_change;
 
-        	bool include_melting_and_freezing;
+        	  bool include_melting_and_freezing;
 
-        	MaterialUtilities::CompositionalAveragingOperation viscosity_averaging;
+        	  MaterialUtilities::CompositionalAveragingOperation viscosity_averaging;
 
-        	virtual double melt_fraction(const double temperature, 
-        		                         const double pressure, 
-        		                         const double depletion) const;
+        	  virtual double melt_fraction(const double temperature, 
+        		                       const double pressure, 
+        		                       const double depletion) const;
 
 		};
 	}
