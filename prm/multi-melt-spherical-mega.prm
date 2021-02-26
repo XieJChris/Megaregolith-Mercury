@@ -1,0 +1,211 @@
+set Dimension                                  = 2
+set Maximum time step                          = 1e6
+set End time                                   = 1.0e8
+set Use years in output instead of seconds     = true
+set CFL number                                 = 0.5
+set Nonlinear solver scheme                    = iterated Advection and Stokes
+set Max nonlinear iterations                   = 50
+set Nonlinear solver tolerance                 = 1e-7
+set Pressure normalization                     = surface
+set Surface pressure                           = 0
+set Adiabatic surface temperature              = 1745
+
+set Output directory                           = output-mega
+
+subsection Solver parameters
+  subsection Operator splitting parameters
+    set Reaction time step                     = 1e4
+    set Reaction time steps per advection step = 20
+  end
+  subsection Stokes solver parameters
+    set Linear solver tolerance                = 1e-8
+    set Number of cheap Stokes solver steps    = 200
+  end
+end
+
+set Use operator splitting = true
+
+subsection Boundary velocity model
+  set Tangential velocity boundary indicators = outer, left, right
+  set Zero velocity boundary indicators = inner
+end
+
+
+subsection Melt settings
+  set Include melt transport = true
+end
+
+##################### Settings for melt transport ########################
+
+# In models with melt transport, we always need a compositional field with
+# the name 'porosity'. Only the field with that name will be advected with
+# the melt velocity, all other compositional fields will continue to work
+# as before. Material models will typically query for the field with the
+# name porosity to compute all melt material properties.
+# In addition, the 'multifields melt' material model also requires a field with the
+# name 'peridotite'. This field is used to track how much material has been
+# molten at each point of the model, so it tracks the information how the
+# composition of the rock changes due to partial melting events (sometimes
+# also called depletion). This is important, because usually less melt is
+# generated for a given temperature and pressure if the rock has undergone
+# melting before. Typically, material properties like the density are also
+# different for more or less depleted material.
+
+subsection Compositional fields
+  set Number of fields = 5
+  set Names of fields  = porosity, peridotite, megaregolith, crust, mantle,
+end
+
+subsection Discretization  
+  subsection Stabilization parameters
+    set beta  = 0.4
+    set cR    = 0.4
+  end
+end
+
+subsection Initial composition model
+  set Model name = function
+  subsection Function
+    set Variable names      = x,y
+    set Function constants  = rcrust = 2400e3, rmega = 2437.5e3
+    set Function expression = 0; \
+                              0;\
+                              if((x*x+y*y>=rmega*rmega),1,0);\
+                              if((x*x+y*y>=rcrust*rcrust && x*x+y*y<rmega*rmega),1,0);\
+                              if((x*x+y*y<rcrust*rcrust),1,0)
+  end
+end
+
+subsection Boundary temperature model
+  set Fixed temperature boundary indicators = inner, outer
+  set List of model names                   = initial temperature
+
+  subsection Initial temperature
+    set Minimal temperature = 440
+    set Maximal temperature = 2000
+  end
+end
+
+subsection Initial temperature model
+  set List of model names         = adiabatic, function
+  subsection Adiabatic
+    set Age top boundary layer    = 1.5609e7
+    set Age bottom boundary layer = 0.673e7
+    subsection Function
+      set Function expression     = 0;0;0;0;0
+    end
+  end
+  subsection Function
+    set Function constants  = amplitude= 50, radius = 3000
+    set Function expression = if((x-1965000)*(x-1965000)+(y-500000)*(y-500000)<radius*radius,amplitude,0)
+  end
+end
+
+
+subsection Boundary composition model
+  set List of model names = initial composition
+end
+
+subsection Boundary fluid pressure model
+  set Plugin name = density
+  subsection Density
+    set Density formulation = fluid density
+  end
+end
+
+subsection Geometry model
+  set Model name = spherical shell
+  subsection Spherical shell
+    set Inner radius  = 1960e3
+    set Outer radius  = 2440e3
+    set Opening angle = 90
+  end
+end
+
+subsection Gravity model
+  set Model name  = radial constant
+  subsection Vertical
+    set Magnitude = 3.7
+  end
+end
+
+subsection Material model
+  set Model name = multi melt
+  subsection Multi melt
+    set Thermal conductivity                      = 4.0,4.0,4.0,0.2,3.0,4.0      
+    set Reference solid density                   = 3500                          #reference density of the solid
+    set Thermal expansion coefficient             = 2e-5                          #the value of the thermal expansion coefficient
+    set Reference shear viscosity                 = 5e21                          #the value of the constant viscosity of the solid matrix
+    set Thermal viscosity exponent                = 7                             #the temperature dependence of the shear viscosity
+    set Reference temperature                     = 1600                          #reference temperature
+    set Solid compressibility                     = 4.2e-12                       #the value of the compressibility of the solid matrix
+    set Reference melt density                    = 3000                          #reference density of the melt/fluid
+    set Reference permeability                    = 1e-8                          #reference permeability of the solid host rock
+    set Reference bulk viscosity                  = 1e19                          #the value of the constant bulk viscosity of the solid matrix
+    set Exponential melt weakening factor         = 10                            #the porosity dependence of the viscosity
+    set Thermal bulk viscosity exponent           = 7                             #the temperature dependence of the bulk viscosity
+    set Melt compressibility                      = 1.25e-11                      #the value of the compressibility of the melt
+    set Melt bulk modulus derivative              = 0                             #the value of the pressure derivative of the melt bulk
+    set Reference melt viscosity                  = 1                             #the value of the constant bulk viscosity
+    set Depletion density change                  = -200                          #the density contrast between material with a depletion of 1 and a depletion of zero
+    set Depletion solidus change                  = 150                           #the solidus temperature change for a depletion of 100%
+    set Reference specific heat                   = 1212                          #the average specific heat of the mantle
+    set Melting time scale for operator splitting = 1e4
+    set Reference densities                       = 3500
+  end
+end
+
+subsection Mesh refinement
+  set Coarsening fraction                         = 0.05
+  set Refinement fraction                         = 0.8
+
+  set Initial adaptive refinement                 = 2
+  set Initial global refinement                   = 4
+  set Strategy                                    = composition threshold, minimum refinement function
+  set Time steps between mesh refinement          = 5
+
+  subsection Minimum refinement function
+    set Function expression = 4
+  end
+
+  subsection Composition threshold
+    set Compositional field thresholds = 1e-8,1.0,1.05,1.05,1.05
+  end
+end
+
+subsection Heating model
+  set List of model names = adiabatic heating, shear heating, latent heat melt
+end
+
+subsection Postprocess
+  set List of postprocessors = visualization, composition statistics, velocity statistics, temperature statistics, depth average
+
+  subsection Visualization
+    set List of output variables      = material properties, nonadiabatic temperature, strain rate, melt material properties, heating
+
+    subsection Material properties
+      set List of material properties = density, viscosity, thermal expansivity
+    end
+
+    subsection Melt material properties
+      set List of properties = fluid density, permeability, fluid viscosity, compaction viscosity
+    end
+
+    set Number of grouped files       = 0
+    set Output format                 = vtu
+    set Time between graphical output = 1e5
+  end
+
+  subsection Depth average
+    set Number of zones = 12
+    set Time between graphical output = 1e5
+  end
+
+end
+
+# We write a checkpoint approximately every half an hour,
+# so that we are able to restart the computation from that
+# point.
+subsection Checkpointing
+  set Time between checkpoint = 1700
+end
