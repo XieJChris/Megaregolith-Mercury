@@ -3,7 +3,9 @@ Supplementary for *Influence of Megaregolith on the thermal evolution of Mercury
   
 This repository only contains the source code of the 2-D convectional simulation. 
 
-These codes are written on the basis of the codes provided by ASPECT, and follows the same protocol/convention as the codes in ASPECT.
+There are two folders, the folder named source contains the source code, and the folder named prm contains the executable files.
+
+The source codes are written on the basis of the codes provided by ASPECT, and follows the same protocol/convention as the codes in ASPECT.
   
 This model runs on Ubuntu 20.04 LTS, tested with ASPECT version 2.2.0.
   
