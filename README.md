@@ -3,9 +3,6 @@ Supplementary for *Influence of Megaregolith on the thermal evolution of Mercury
   
 This repository only contains the source code of the 2-D convectional simulation.
   
-This model runs on ASPECT - Advanced Solver for Problems in Earth's ConvecTion. For details about ASPECT, refer to: https://github.com/geodynamics/aspect
+This model runs on Ubuntu 20.04 LTS, implemented through ASPECT.
   
-# Version-information
-OS: Ubuntu 20.04 LTS
-  
-ASPECT: ASPECT 2.2.0
+ASPECT - Advanced Solver for Problems in Earth's ConvecTion. For details about ASPECT, refer to: https://github.com/geodynamics/aspect
