@@ -26,7 +26,8 @@ end
 set Use operator splitting = true
 
 subsection Boundary velocity model
-  set Tangential velocity boundary indicators = inner, outer, left, right
+  set Tangential velocity boundary indicators = outer, left, right
+  set Zero velocity boundary indicators = inner
 end
 
 
