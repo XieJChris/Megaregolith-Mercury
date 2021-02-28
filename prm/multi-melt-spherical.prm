@@ -94,8 +94,9 @@ subsection Initial temperature model
     end
   end
   subsection Function
-    set Function constants  = amplitude= 50, radius = 3000
-    set Function expression = if((x-1965000)*(x-1965000)+(y-500000)*(y-500000)<radius*radius,amplitude,0)
+    set Coordinate system = spherical
+    set Variable names = r, phi
+    set Function expression = if((r<1960.5e3 && r>=1960e3 && phi<3.14159265/2 && phi>2*3.14159265/9),50,0)
   end
 end
 
