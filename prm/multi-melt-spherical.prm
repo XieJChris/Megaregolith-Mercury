@@ -1,6 +1,6 @@
 set Dimension                                  = 2
 set Maximum time step                          = 1e6
-set End time                                   = 1.0e8
+set End time                                   = 1.0e9
 set Use years in output instead of seconds     = true
 set CFL number                                 = 0.5
 set Nonlinear solver scheme                    = iterated Advection and Stokes
@@ -8,7 +8,7 @@ set Max nonlinear iterations                   = 60
 set Nonlinear solver tolerance                 = 1e-7
 set Pressure normalization                     = surface
 set Surface pressure                           = 0
-set Adiabatic surface temperature              = 1745
+set Adiabatic surface temperature              = 1650
 
 set Output directory                           = output-normal
 
@@ -96,7 +96,7 @@ subsection Initial temperature model
   subsection Function
     set Coordinate system = spherical
     set Variable names = r, phi
-    set Function expression = if((r<1960.5e3 && r>=1960e3 && phi<3.14159265/2 && phi>2*3.14159265/9),50,0)
+    set Function expression = if((r<1960.5e3 && r>=1960e3 && phi<3.14159265/2 && phi>2*3.14159265/9),100,0)
   end
 end
 
