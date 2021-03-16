@@ -4,11 +4,11 @@ set End time                                   = 1.0e8
 set Use years in output instead of seconds     = true
 set CFL number                                 = 0.5
 set Nonlinear solver scheme                    = iterated Advection and Stokes
-set Max nonlinear iterations                   = 75
+set Max nonlinear iterations                   = 30
 set Nonlinear solver tolerance                 = 1e-7
 set Pressure normalization                     = surface
 set Surface pressure                           = 0
-set Adiabatic surface temperature              = 1745
+set Adiabatic surface temperature              = 1610
 
 set Output directory                           = output-mega
 
@@ -18,8 +18,8 @@ subsection Solver parameters
     set Reaction time steps per advection step = 20
   end
   subsection Stokes solver parameters
-    set Linear solver tolerance                = 1e-8
-    set Number of cheap Stokes solver steps    = 300
+    set Linear solver tolerance                = 1e-7
+    set Number of cheap Stokes solver steps    = 200
   end
 end
 
@@ -28,7 +28,6 @@ set Use operator splitting = true
 subsection Boundary velocity model
   set Tangential velocity boundary indicators = inner, outer, left, right
 end
-
 
 subsection Melt settings
   set Include melt transport = true
@@ -57,21 +56,22 @@ end
 
 subsection Discretization  
   subsection Stabilization parameters
-    set beta  = 0.4
-    set cR    = 0.4
+    set beta  = 0.5
+    set cR    = 0.5
   end
 end
 
 subsection Initial composition model
   set Model name = function
   subsection Function
-    set Variable names      = x,y
+    set Variable names      = r, phi
+    set Coordinate system   = spherical
     set Function constants  = rcrust = 2400e3, rmega = 2437.5e3
     set Function expression = 0; \
                               0;\
-                              if((x*x+y*y>=rmega*rmega),1,0);\
-                              if((x*x+y*y>=rcrust*rcrust && x*x+y*y<rmega*rmega),1,0);\
-                              if((x*x+y*y<rcrust*rcrust),1,0)
+                              if((r>=rmega),1,0);\
+                              if((r>=rcrust && r<rmega),1,0);\
+                              if((r<rcrust),1,0)
   end
 end
 
@@ -81,7 +81,7 @@ subsection Boundary temperature model
 
   subsection Initial temperature
     set Minimal temperature = 440
-    set Maximal temperature = 2000
+    set Maximal temperature = 2100
   end
 end
 
@@ -95,12 +95,11 @@ subsection Initial temperature model
     end
   end
   subsection Function
-    set Coordinate system = spherical
-    set Variable names = r, phi
-    set Function expression = if((r<1960.5e3 && r>=1960e3 && phi<3.14159265/2 && phi>2*3.14159265/9),50,0)
+    set Variable names      = r, phi
+    set Coordinate system   = spherical
+    set Function expression = if((r<1960.5e3 && r>=1960e3 && phi<1.1344640125 && phi>3.14159265/3),100,0)
   end
 end
-
 
 subsection Boundary composition model
   set List of model names = initial composition
@@ -136,14 +135,14 @@ subsection Material model
     set Reference solid density                   = 3500                          #reference density of the solid
     set Thermal expansion coefficient             = 2e-5                          #the value of the thermal expansion coefficient
     set Reference shear viscosity                 = 5e21                          #the value of the constant viscosity of the solid matrix
-    set Thermal viscosity exponent                = 7                             #the temperature dependence of the shear viscosity
+    set Thermal viscosity exponent                = 4                             #the temperature dependence of the shear viscosity
     set Reference temperature                     = 1600                          #reference temperature
     set Solid compressibility                     = 4.2e-12                       #the value of the compressibility of the solid matrix
     set Reference melt density                    = 3000                          #reference density of the melt/fluid
     set Reference permeability                    = 1e-8                          #reference permeability of the solid host rock
     set Reference bulk viscosity                  = 1e19                          #the value of the constant bulk viscosity of the solid matrix
-    set Exponential melt weakening factor         = 10                            #the porosity dependence of the viscosity
-    set Thermal bulk viscosity exponent           = 7                             #the temperature dependence of the bulk viscosity
+    set Exponential melt weakening factor         = 12                            #the porosity dependence of the viscosity
+    set Thermal bulk viscosity exponent           = 6                             #the temperature dependence of the bulk viscosity
     set Melt compressibility                      = 1.25e-11                      #the value of the compressibility of the melt
     set Melt bulk modulus derivative              = 0                             #the value of the pressure derivative of the melt bulk
     set Reference melt viscosity                  = 1                             #the value of the constant bulk viscosity
@@ -159,8 +158,8 @@ subsection Mesh refinement
   set Coarsening fraction                         = 0.05
   set Refinement fraction                         = 0.8
 
-  set Initial adaptive refinement                 = 3
-  set Initial global refinement                   = 5
+  set Initial adaptive refinement                 = 2
+  set Initial global refinement                   = 4
   set Strategy                                    = composition threshold, minimum refinement function
   set Time steps between mesh refinement          = 5
 
