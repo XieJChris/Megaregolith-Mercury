@@ -96,7 +96,7 @@ subsection Initial temperature model
   subsection Function
     set Variable names      = r, phi
     set Coordinate system   = spherical
-    set Function expression = if((r<1960.5e3 && r>=1960e3 && phi<1.1344640125 && phi>3.14159265/3),100,0)
+    set Function expression = if((r<1960.5e3 && r>=1960e3 && phi>1.113143243 && phi<1.1344640125),150,0)
   end
 end
 
@@ -133,15 +133,15 @@ subsection Material model
     set Thermal conductivity                      = 4.0,4.0,4.0,3.0,4.0      
     set Reference solid density                   = 3500                          #reference density of the solid
     set Thermal expansion coefficient             = 2e-5                          #the value of the thermal expansion coefficient
-    set Reference shear viscosity                 = 5e21                          #the value of the constant viscosity of the solid matrix
+    set Reference shear viscosity                 = 1e21                          #the value of the constant viscosity of the solid matrix
     set Thermal viscosity exponent                = 4                             #the temperature dependence of the shear viscosity
     set Reference temperature                     = 1600                          #reference temperature
-    set Solid compressibility                     = 4.2e-12                       #the value of the compressibility of the solid matrix
+    set Solid compressibility                     = 5.0e-12                       #the value of the compressibility of the solid matrix
     set Reference melt density                    = 3000                          #reference density of the melt/fluid
     set Reference permeability                    = 1e-8                          #reference permeability of the solid host rock
-    set Reference bulk viscosity                  = 1e19                          #the value of the constant bulk viscosity of the solid matrix
-    set Exponential melt weakening factor         = 12                            #the porosity dependence of the viscosity
-    set Thermal bulk viscosity exponent           = 6                             #the temperature dependence of the bulk viscosity
+    set Reference bulk viscosity                  = 8e18                          #the value of the constant bulk viscosity of the solid matrix
+    set Exponential melt weakening factor         = 11                            #the porosity dependence of the viscosity
+    set Thermal bulk viscosity exponent           = 4                             #the temperature dependence of the bulk viscosity
     set Melt compressibility                      = 1.25e-11                      #the value of the compressibility of the melt
     set Melt bulk modulus derivative              = 0                             #the value of the pressure derivative of the melt bulk
     set Reference melt viscosity                  = 1                             #the value of the constant bulk viscosity
