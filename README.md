@@ -3,7 +3,7 @@
   
 * This repository only contains the source code of the 2-D convectional simulation. 
 
-* There are two folders, the folder named source contains the source code, and the folder named prm contains the executable files.
+* There are three folders, the folder named Data contains the initial temperature profile, source contains the source code, and the folder named prm contains the executable files.
 
 * The source codes are written on the basis of the codes provided by ASPECT, and follow the same protocol/convention as the codes in ASPECT.
   
