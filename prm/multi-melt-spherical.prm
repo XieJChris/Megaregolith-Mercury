@@ -1,16 +1,16 @@
 set Dimension                                  = 2
 set Maximum time step                          = 1e6
-set End time                                   = 1.0e9
+set End time                                   = 3.0e8
 set Use years in output instead of seconds     = true
 set CFL number                                 = 0.5
 set Nonlinear solver scheme                    = iterated Advection and Stokes
-set Max nonlinear iterations                   = 30
 set Nonlinear solver tolerance                 = 1e-7
+set Max nonlinear iterations                   = 35
 set Pressure normalization                     = surface
 set Surface pressure                           = 0
 set Adiabatic surface temperature              = 1610
 
-set Output directory                           = output-normal
+set Output directory                           = output-without-megaregolith
 
 subsection Solver parameters
   subsection Operator splitting parameters
@@ -18,8 +18,8 @@ subsection Solver parameters
     set Reaction time steps per advection step = 20
   end
   subsection Stokes solver parameters
-    set Linear solver tolerance                = 1e-7
-    set Number of cheap Stokes solver steps    = 200
+    set Linear solver tolerance                = 1e-8
+    set Number of cheap Stokes solver steps    = 100
   end
 end
 
@@ -51,7 +51,7 @@ end
 
 subsection Compositional fields
   set Number of fields = 4
-  set Names of fields  = porosity, peridotite, crust, mantle,
+  set Names of fields  = porosity, peridotite, crust, mantle
 end
 
 subsection Discretization  
@@ -61,12 +61,21 @@ subsection Discretization
   end
 end
 
+subsection Geometry model
+  set Model name = spherical shell
+  subsection Spherical shell
+    set Inner radius  = 2020e3
+    set Outer radius  = 2440e3
+    set Opening angle = 90
+  end
+end
+
 subsection Initial composition model
   set Model name = function
   subsection Function
     set Variable names      = r, phi
     set Coordinate system   = spherical
-    set Function constants  = rcrust = 2410e3
+    set Function constants  = rcrust = 2388122.9
     set Function expression = 0; \
                               0;\
                               if((r>=rcrust),1,0);\
@@ -80,23 +89,20 @@ subsection Boundary temperature model
 
   subsection Initial temperature
     set Minimal temperature = 440
-    set Maximal temperature = 2100
+    set Maximal temperature = 1945.16
   end
 end
 
 subsection Initial temperature model
-  set List of model names         = adiabatic, function
-  subsection Adiabatic
-    set Age top boundary layer    = 1.5609e7
-    set Age bottom boundary layer = 0.673e7
-    subsection Function
-      set Function expression     = 0;0;0;0
-    end
+  set List of model names   = ascii profile, function
+  subsection Ascii profile
+    set Data directory      = /path-to-data-file/ # e.g., /users/xxx/xxx/file/
+    set Data file name      = initial_temperature_profile.txt
   end
   subsection Function
     set Variable names      = r, phi
     set Coordinate system   = spherical
-    set Function expression = if((r<1960.5e3 && r>=1960e3 && phi>1.113143243 && phi<1.1344640125),150,0)
+    set Function expression = if((r<2020.5e3 && r>=2020e3 && phi>1.113143243 && phi<1.1344640125),150,0)
   end
 end
 
@@ -111,15 +117,6 @@ subsection Boundary fluid pressure model
   end
 end
 
-subsection Geometry model
-  set Model name = spherical shell
-  subsection Spherical shell
-    set Inner radius  = 1960e3
-    set Outer radius  = 2440e3
-    set Opening angle = 90
-  end
-end
-
 subsection Gravity model
   set Model name  = radial constant
   subsection Vertical
@@ -130,17 +127,17 @@ end
 subsection Material model
   set Model name = multi melt
   subsection Multi melt
-    set Thermal conductivity                      = 4.0,4.0,4.0,3.0,4.0      
+    set Thermal conductivity                      = 4.0,4.0,4.0,2.5,4.0      
     set Reference solid density                   = 3500                          #reference density of the solid
     set Thermal expansion coefficient             = 2e-5                          #the value of the thermal expansion coefficient
-    set Reference shear viscosity                 = 1e21                          #the value of the constant viscosity of the solid matrix
+    set Reference shear viscosity                 = 2e21                          #the value of the constant viscosity of the solid matrix
     set Thermal viscosity exponent                = 4                             #the temperature dependence of the shear viscosity
     set Reference temperature                     = 1600                          #reference temperature
-    set Solid compressibility                     = 5.0e-12                       #the value of the compressibility of the solid matrix
+    set Solid compressibility                     = 3.0e-12                       #the value of the compressibility of the solid matrix
     set Reference melt density                    = 3000                          #reference density of the melt/fluid
     set Reference permeability                    = 1e-8                          #reference permeability of the solid host rock
-    set Reference bulk viscosity                  = 8e18                          #the value of the constant bulk viscosity of the solid matrix
-    set Exponential melt weakening factor         = 11                            #the porosity dependence of the viscosity
+    set Reference bulk viscosity                  = 1e19                          #the value of the constant bulk viscosity of the solid matrix
+    set Exponential melt weakening factor         = 12                            #the porosity dependence of the viscosity
     set Thermal bulk viscosity exponent           = 4                             #the temperature dependence of the bulk viscosity
     set Melt compressibility                      = 1.25e-11                      #the value of the compressibility of the melt
     set Melt bulk modulus derivative              = 0                             #the value of the pressure derivative of the melt bulk
@@ -155,7 +152,7 @@ end
 
 subsection Mesh refinement
   set Coarsening fraction                         = 0.05
-  set Refinement fraction                         = 0.8
+  set Refinement fraction                         = 0.95
 
   set Initial adaptive refinement                 = 2
   set Initial global refinement                   = 4
@@ -176,7 +173,7 @@ subsection Heating model
 end
 
 subsection Postprocess
-  set List of postprocessors = visualization, composition statistics, velocity statistics, temperature statistics, depth average
+  set List of postprocessors = visualization, composition statistics, velocity statistics, temperature statistics, depth average, melt statistics
 
   subsection Visualization
     set List of output variables      = material properties, nonadiabatic temperature, strain rate, melt material properties, heating, melt fraction
