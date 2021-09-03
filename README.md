@@ -1,7 +1,7 @@
 # Megaregolith-Mercury
 * Supplementary for *Influence of Megaregolith on the thermal evolution of Mercury's silicate shell*.  
   
-* This repository only contains the source code of the 2-D convectional simulation. 
+* This repository only contains the necessary files for the 2-D convectional simulation. 
 
 * There are three folders, the folder named Data contains the initial temperature profile, source contains the source code, and the folder named prm contains the executable files.
 
